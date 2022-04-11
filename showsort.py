@@ -1,25 +1,14 @@
 #!/usr/bin/python3
 
+import pywikibot
 import requests
+import urllib
 import wikipedia
 
-from html.parser import HTMLParser
 from os import walk, getcwd, path
 from sys import argv
 # from os import listdir
 # from os.path import isfile, join
-
-
-class MyHTMLParser(HTMLParser):
-    def handle_starttag(self, tag, attrs):
-        print("Encountered a start tag:", tag)
-
-    def handle_endtag(self, tag):
-        print("Encountered an end tag :", tag)
-
-    def handle_data(self, data):
-        print("Encountered some data  :", data)
-
 
 class Sorter:
 
@@ -31,11 +20,21 @@ class Sorter:
         # NOTE should search for show + TV Series; if not present, go with first result
 
         # Attempt No. 1
-        query = wikipedia.search(f'{self.show} (TV series)')
-        pg = wikipedia.page(query[0])
-        print(pg.content)
+        query = wikipedia.search(self.show)[0]
+        page = wikipedia.search(f'List of {query} episodes')[0]
+        wiki = pywikibot.Site('en', 'wikipedia')
+        page = pywikibot.Page(wiki, page)
 
-        print(query)
+        # TODO now we need to parse the output
+        print(page.get())
+        # site = pywikibot.Site('en', 'wikipedia')
+        # query = wikipedia.search(f'List of {self.show} episodes')
+        # page = pywikibot.Page(site, query[0])
+        # print(page)
+        # print(query)
+        # pg = wikipedia.page(query[0])
+        # print(pg.content)
+
 
     def find(self):
         files = next(walk("."), (None, None, []))[2]
@@ -47,6 +46,7 @@ def dirp(s):
 
 
 show = argv[1]
+# TODO if no arg is given, get the current directory
 if dirp(show):
     show = path.basename(path.abspath(show))
 print(show)
