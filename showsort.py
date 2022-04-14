@@ -115,11 +115,11 @@ class Sorter:
                     raise e
             chdir('Season %.2d' % ii)
             ## Link files
-            limit = int(season)
-            for ep in episodes:
-                if limit == 0:
-                    break
+            for epint in range(1, int(season)):
+                # if limit == 0:
+                #     break
                 # print(path.realpath(ep))
+                ep = episodes.pop(0)
                 try:
                     symlink(ep, path.basename(ep))
                 except OSError as e:
@@ -127,8 +127,8 @@ class Sorter:
                         pass
                     else:
                         raise e
-                episodes.pop(0) # consume each episode as we link it
-                limit -= 1
+                # episodes.pop(0) # consume each episode as we link it
+                # limit -= 1
             ## Rename files
             files = self._find(getcwd())
             jj = 1
