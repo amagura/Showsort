@@ -68,6 +68,10 @@ class Sorter:
                         and mimetypes.guess_type(os.fsdecode(zz))[0].startswith('video'), files)
         videos = map(lambda xx: path.realpath(path.join(self.src, xx)), videos)
         videos = list(videos)
+        print(videos)
+        tmp = videos
+        tmp.sort()
+        print(tmp)
         # print(list(videos))
         #
         # files = [mimetypes.guess_type(os.fsdecode(item)) for item in os.listdir(dir)]
