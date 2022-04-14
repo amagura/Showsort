@@ -66,6 +66,7 @@ class Sorter:
         #     files[idx] = path.realpath(tmp)
         videos = filter(lambda zz: mimetypes.guess_type(os.fsdecode(zz)) != (None, None) \
                         and mimetypes.guess_type(os.fsdecode(zz))[0].startswith('video'), files)
+        videos = map(lambda xx: path.realpath(path.join(self.src, xx)), videos)
         videos = list(videos)
         # print(list(videos))
         #
