@@ -22,6 +22,9 @@ class Sorter:
         self.src = args.show
         self.dest = getcwd()
         self.seasons = args.season
+        # self.seasons = self._flatten(self.seasons)
+        self.seasons = self._flatten(self.seasons)
+        print(self.seasons)
 
     def get_eplist(self):
         pass
@@ -50,21 +53,42 @@ class Sorter:
         files = next(walk(dir), (None, None, []))[2]
         return files
 
+    def _flatten(self, *n):
+        '''Flattens lists of lists, even deeply nested ones'''
+        return list((e for a in n
+                for e in (self._flatten(*a) if isinstance(a, (tuple, list)) else (a,))))
+    # OG Code:
+    # Written by samplebias: https://stackoverflow.com/users/538718/samplebias
+    # flatten = lambda *n: (e for a in n
+    #    for e in (flatten(*a) if isinstance(a, (tuple, list)) else (a,)))
 
     def linker(self):
-        ii = len(self.seasons)
-        files = self._find()
+        ii = 1
+        episodes = self._find()
         for season in self.seasons:
-            mkdir('./Season %.2d' % ii)
+            try:
+                mkdir('./Season %.2d' % ii)
+            except OSError as e:
+                if e.errno == errno.EEXIST:
+                    pass
+                else:
+                    raise e
             chdir('Season %.2d' % ii)
             ## Link files
-            for ep in files:
+            limit = int(season)
+            for ep in episodes:
+                if limit == 0:
+                    break
                 # print(path.realpath(ep))
                 try:
                     symlink(path.realpath(ep), f'./{ep}')
                 except OSError as e:
                     if e.errno == errno.EEXIST:
                         pass
+                    else:
+                        raise e
+                episodes.pop(0) # consume each episode as we link it
+                limit -= 1
             ## Rename files
             files = self._find(getcwd())
             jj = 1
@@ -80,7 +104,7 @@ class Sorter:
                 # print(f'`{episode}` -> `{tmp}`')
                 jj += 1
             chdir('../')
-            ii -= 1
+            ii += 1
 
 
 
