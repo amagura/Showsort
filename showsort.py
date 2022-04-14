@@ -115,7 +115,7 @@ class Sorter:
                     raise e
             chdir('Season %.2d' % ii)
             ## Link files
-            for epint in range(1, int(season)):
+            for epint in range(int(season)):
                 # if limit == 0:
                 #     break
                 # print(path.realpath(ep))
