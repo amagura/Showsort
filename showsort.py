@@ -2,6 +2,9 @@
 
 import argparse
 import errno
+import glob
+import mimetypes
+import os
 import re
 # import ctypes
 # import pywikibot
@@ -9,7 +12,7 @@ import re
 # import urllib
 # import wikipedia
 
-from os import walk, getcwd, path, symlink, mkdir, chdir, rename
+from os import walk, getcwd, path, symlink, mkdir, chdir, rename, listdir
 from sys import argv
 # from os import listdir
 # from os.path import isfile, join
@@ -54,18 +57,35 @@ class Sorter:
         dir = path.realpath(dir)
         # for root, dirs, files in walk(dir):
         #     for file in files:
-        files = next(walk(dir), (None, None, []))[2]
+        # files = next(walk(dir), (None, None, []))[2]
+        #
+        # files.sort()
+        #
+        # for idx in range(len(files)):
+        #     tmp = path.join(self.src, files[idx])
+        #     files[idx] = path.realpath(tmp)
 
-        for idx in range(len(files)):
-            tmp = path.join(self.src, files[idx])
-            files[idx] = path.realpath(tmp)
+        videos = filter(lambda zz: mimetypes.guess_type(os.fsdecode(zz)) != (None, None) \
+                        and mimetypes.guess_type(os.fsdecode(zz))[0].startswith('video'), os.listdir(dir))
+        print(list(videos))
+        #
+        # files = [mimetypes.guess_type(os.fsdecode(item)) for item in os.listdir(dir)]
+        # print(files)
+        # videos = filter(lambda xx: xx != (None, None), files)
+        # print(videos)
+
+        # for file in os.listdir(dir):
+        #     print(file)
+        #     filename = os.fsdecode(file)
+        #     print (mimetypes.guess_type(filename))
+            # if mimetypes.guess_type(filename)[0].startswith('video'):
+            #     print(file)
 
 
-        files.sort()
+        # print(files)
+        return videos
 
-        print(files)
-
-        return files
+        # return files
 
     def _flatten(self, *n):
         '''Flattens lists of lists, even deeply nested ones'''
