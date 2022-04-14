@@ -50,7 +50,17 @@ class Sorter:
     def _find(self, dir=None):
         if dir == None:
             dir = self.src
+
+        dir = path.realpath(dir)
+        # for root, dirs, files in walk(dir):
+        #     for file in files:
         files = next(walk(dir), (None, None, []))[2]
+
+        for idx in range(len(files)):
+            tmp = path.join(self.src, files[idx])
+            files[idx] = path.realpath(tmp)
+
+
         return files
 
     def _flatten(self, *n):
@@ -65,6 +75,7 @@ class Sorter:
     def linker(self):
         ii = 1
         episodes = self._find()
+        print(episodes)
         for season in self.seasons:
             try:
                 mkdir('./Season %.2d' % ii)
@@ -81,7 +92,7 @@ class Sorter:
                     break
                 # print(path.realpath(ep))
                 try:
-                    symlink(path.realpath(ep), f'./{ep}')
+                    symlink(ep, path.basename(ep))
                 except OSError as e:
                     if e.errno == errno.EEXIST:
                         pass
