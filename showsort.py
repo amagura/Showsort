@@ -61,6 +61,10 @@ class Sorter:
             files[idx] = path.realpath(tmp)
 
 
+        files.sort()
+
+        print(files)
+
         return files
 
     def _flatten(self, *n):
