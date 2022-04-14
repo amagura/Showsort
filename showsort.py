@@ -57,17 +57,16 @@ class Sorter:
         dir = path.realpath(dir)
         # for root, dirs, files in walk(dir):
         #     for file in files:
-        # files = next(walk(dir), (None, None, []))[2]
+        files = next(walk(dir), (None, None, []))[2]
         #
-        # files.sort()
+        files.sort()
         #
         # for idx in range(len(files)):
         #     tmp = path.join(self.src, files[idx])
         #     files[idx] = path.realpath(tmp)
-
         videos = filter(lambda zz: mimetypes.guess_type(os.fsdecode(zz)) != (None, None) \
-                        and mimetypes.guess_type(os.fsdecode(zz))[0].startswith('video'), os.listdir(dir))
-        print(list(videos))
+                        and mimetypes.guess_type(os.fsdecode(zz))[0].startswith('video'), files)
+        # print(list(videos))
         #
         # files = [mimetypes.guess_type(os.fsdecode(item)) for item in os.listdir(dir)]
         # print(files)
