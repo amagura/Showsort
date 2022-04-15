@@ -73,7 +73,8 @@ class Sorter:
 
             known = filter(lambda x: mimetypes.guess_type(os.fsdecode(x)) != (None, None), files)
             vids = filter(lambda x: mimetypes.guess_type(os.fsdecode(x))[0].startswith('video'), known)
-            vids = list(vids)
+            real_vids = map(lambda x: path.join(show, x), vids)
+            vids = list(real_vids)
             videos.append(vids)
 
 
