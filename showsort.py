@@ -63,7 +63,7 @@ class Sorter:
             #     print(show)
             #     exit(0)
 
-        shows = map(lambda x: path.abspath(x), shows)
+        shows = map(lambda x: path.realpath(x), shows)
 
         videos = []
 
