@@ -13,7 +13,7 @@ import re
 # import wikipedia
 
 from os import walk, getcwd, path, symlink, mkdir, chdir, rename, listdir
-from sys import argv
+from sys import argv, exit
 # from os import listdir
 # from os.path import isfile, join
 
@@ -50,14 +50,20 @@ class Sorter:
         # pg = wikipedia.page(query[0])
         # print(pg.content)
 
-    def _find(self, dir=None):
-        if dir == None:
-            dir = self.src
+    def _find(self, shows=None):
+        if shows == None:
+            shows = self.src
 
-        dir = path.realpath(dir)
+
+        if type(shows) is list:
+            for show in shows:
+                print(show)
+                exit(0)
+
+        shows = path.realpath(shows)
         # for root, dirs, files in walk(dir):
         #     for file in files:
-        files = next(walk(dir), (None, None, []))[2]
+        files = next(walk(shows), (None, None, []))[2]
         #
         files.sort()
         #
@@ -74,12 +80,12 @@ class Sorter:
         print(tmp)
         # print(list(videos))
         #
-        # files = [mimetypes.guess_type(os.fsdecode(item)) for item in os.listdir(dir)]
+        # files = [mimetypes.guess_type(os.fsdecode(item)) for item in os.listdir(shows)]
         # print(files)
         # videos = filter(lambda xx: xx != (None, None), files)
         # print(videos)
 
-        # for file in os.listdir(dir):
+        # for file in os.listdir(shows):
         #     print(file)
         #     filename = os.fsdecode(file)
         #     print (mimetypes.guess_type(filename))
@@ -101,10 +107,12 @@ class Sorter:
     # flatten = lambda *n: (e for a in n
     #    for e in (flatten(*a) if isinstance(a, (tuple, list)) else (a,)))
 
-    def linker(self):
+    def sort(self):
+        self.episodes = self._find()
+        self._linker()
+
+    def _linker(self):
         ii = 1
-        episodes = self._find()
-        print(episodes)
         for season in self.seasons:
             try:
                 mkdir('./Season %.2d' % ii)
@@ -119,7 +127,7 @@ class Sorter:
                 # if limit == 0:
                 #     break
                 # print(path.realpath(ep))
-                ep = episodes.pop(0)
+                ep = self.episodes.pop(0)
                 try:
                     symlink(ep, path.basename(ep))
                 except OSError as e:
@@ -154,12 +162,12 @@ def dirp(s):
 
 #
 parser = argparse.ArgumentParser(description='Sorts shows in a torrent friendly manner')
-parser.add_argument('show', type=str, help='directory containing episodes')
+parser.add_argument('show', type=str, nargs='+', help='directory containing episodes')
 parser.add_argument('-s', '--season', action='append', nargs='+', help="split show into seasons")
 args = parser.parse_args()
 
 srt = Sorter(args)
-srt.linker()
+srt.sort()
 
 # show = argv[1]
 # # TODO if no arg is given, get the current directory
