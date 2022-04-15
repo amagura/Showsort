@@ -12,7 +12,7 @@ import re
 # import urllib
 # import wikipedia
 
-from os import walk, getcwd, path, symlink, mkdir, chdir, rename, listdir
+from os import walk, getcwd, path, symlink, mkdir, chdir, rename, listdir, rmdir
 from sys import argv, exit
 # from os import listdir
 # from os.path import isfile, join
@@ -27,7 +27,9 @@ class Sorter:
         self.seasons = args.season
         # self.seasons = self._flatten(self.seasons)
         self.seasons = self._flatten(self.seasons)
-        print(self.seasons)
+        # self.episodes = self._find()
+        # print(self.seasons)
+        # print(self.episodes[0])
 
     def get_eplist(self):
         pass
@@ -55,45 +57,30 @@ class Sorter:
             shows = self.src
 
 
-        if type(shows) is list:
-            for show in shows:
-                print(show)
-                exit(0)
+        if type(shows) is not list:
+            shows = [shows]
+            # for show in shows:
+            #     print(show)
+            #     exit(0)
 
-        shows = path.realpath(shows)
-        # for root, dirs, files in walk(dir):
-        #     for file in files:
-        files = next(walk(shows), (None, None, []))[2]
-        #
-        files.sort()
-        #
-        # for idx in range(len(files)):
-        #     tmp = path.join(self.src, files[idx])
-        #     files[idx] = path.realpath(tmp)
-        videos = filter(lambda zz: mimetypes.guess_type(os.fsdecode(zz)) != (None, None) \
-                        and mimetypes.guess_type(os.fsdecode(zz))[0].startswith('video'), files)
-        videos = map(lambda xx: path.realpath(path.join(self.src, xx)), videos)
-        videos = list(videos)
-        print(videos)
-        tmp = videos
-        tmp.sort()
-        print(tmp)
-        # print(list(videos))
-        #
-        # files = [mimetypes.guess_type(os.fsdecode(item)) for item in os.listdir(shows)]
-        # print(files)
-        # videos = filter(lambda xx: xx != (None, None), files)
+        shows = map(lambda x: path.realpath(x), shows)
+
+        videos = []
+
+        for show in shows:
+            files = next(walk(show), (None, None, []))[2]
+            files.sort()
+
+            known = filter(lambda x: mimetypes.guess_type(os.fsdecode(x)) != (None, None), files)
+            vids = filter(lambda x: mimetypes.guess_type(os.fsdecode(x))[0].startswith('video'), known)
+            vids = list(vids)
+            videos.append(vids)
+
+
+        videos = self._flatten(videos)
+        # self.episodes = videos
         # print(videos)
-
-        # for file in os.listdir(shows):
-        #     print(file)
-        #     filename = os.fsdecode(file)
-        #     print (mimetypes.guess_type(filename))
-            # if mimetypes.guess_type(filename)[0].startswith('video'):
-            #     print(file)
-
-
-        # print(files)
+        # exit(0)
         return videos
 
         # return files
@@ -109,12 +96,17 @@ class Sorter:
 
     def sort(self):
         self.episodes = self._find()
+        # print(self.episodes)
+        # exit(0)
         self._linker()
 
     def _linker(self):
         ii = 1
+        # print(self.episodes)
         for season in self.seasons:
             try:
+                # FIXME if there are more than 99 seasons, the seasons won't
+                # all have the same number of digits
                 mkdir('./Season %.2d' % ii)
             except OSError as e:
                 if e.errno == errno.EEXIST:
@@ -123,11 +115,22 @@ class Sorter:
                     raise e
             chdir('Season %.2d' % ii)
             ## Link files
+            # print(f'season: {season}')
             for epint in range(int(season)):
+                # print(f'epint: {epint}')
                 # if limit == 0:
                 #     break
                 # print(path.realpath(ep))
-                ep = self.episodes.pop(0)
+                try:
+                    ep = self.episodes.pop(0)
+                except IndexError as e:
+                    left = 1 if len(self.seasons) - ii == 0 else len(self.seasons) - ii
+                    right = 'season' if left == 1 else 'seasons'
+                    print(f'error: out of episodes, but {left} {right} left')
+                    for kdx in range(ii, len(self.seasons) + 1):
+                        chdir('..')
+                        rmdir('Season %.2d' % kdx)
+                    return
                 try:
                     symlink(ep, path.basename(ep))
                 except OSError as e:
@@ -153,6 +156,7 @@ class Sorter:
                 jj += 1
             chdir('../')
             ii += 1
+        print(self.seasons[ii+1])
 
 
 
