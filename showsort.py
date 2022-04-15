@@ -157,8 +157,6 @@ class Sorter:
                 jj += 1
             chdir('../')
             ii += 1
-        print(self.seasons[ii+1])
-
 
 
 def dirp(s):
