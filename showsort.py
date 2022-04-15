@@ -151,7 +151,7 @@ class Sorter:
                 elif re.match(r'S\d+E\d+', episode):
                     # Don't rename files that already have been renamed
                     continue
-                tmp = "S%.2dE%.2d %s" % (ii, jj, episode)
+                tmp = "S%.2dE%.2d %s" % (ii, jj, path.basename(episode))
                 rename(episode, tmp)
                 # print(f'`{episode}` -> `{tmp}`')
                 jj += 1
