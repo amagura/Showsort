@@ -162,7 +162,9 @@ class Sorter:
             ## Rename files
             files = self._find(getcwd())
             jj = 1
-            for episode in files:
+            for epint in range(int(season)):
+                episode = self.episodes.pop(0)
+            # for episode in files:
                 if not path.islink(episode):
                     # Don't rename files that aren't symlinks
                     continue
