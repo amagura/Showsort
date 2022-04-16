@@ -28,6 +28,7 @@ class Sorter:
         self.seasons = args.season
         # self.seasons = self._flatten(self.seasons)
         self.seasons = self._flatten(self.seasons)
+        self.one = args.one
         # self.episodes = self._find()
         # print(self.seasons)
         # print(self.episodes[0])
@@ -102,10 +103,26 @@ class Sorter:
         # exit(0)
         self._linker()
 
+    def _link(self, episode):
+        try:
+            glob = next(Path('.').glob(f'S*E* {path.basename(episode)}'))
+            print(f'glob: {glob}')
+        except StopIteration as e:
+            pass
+            try:
+                symlink(episode, path.basename(episode))
+            except OSError as e:
+                if e.errno == errno.EEXIST:
+                    pass
+                else:
+                    raise e
+
     def _linker(self):
         ii = 1
         # print(self.episodes)
         for season in self.seasons:
+            if self.one:
+                ii = 1
             try:
                 # FIXME if there are more than 99 seasons, the seasons won't
                 # all have the same number of digits
@@ -139,18 +156,7 @@ class Sorter:
                     #     print(f'Season %d: Season {kdx}')
                     #     rmdir('Season %.2d' % kdx)
                     return
-                try:
-                    glob = next(Path('.').glob(f'S*E* {path.basename(ep)}'))
-                    print(f'glob: {glob}')
-                except StopIteration as e:
-                    pass
-                try:
-                    symlink(ep, path.basename(ep))
-                except OSError as e:
-                    if e.errno == errno.EEXIST:
-                        pass
-                    else:
-                        raise e
+                self._link(ep)
                 # episodes.pop(0) # consume each episode as we link it
                 # limit -= 1
             ## Rename files
@@ -171,6 +177,9 @@ class Sorter:
                 jj += 1
             chdir('../')
             ii += 1
+        if ii == 1:
+            for ep in self.episodes:
+                self._link(ep)
 
 
 def dirp(s):
@@ -181,6 +190,7 @@ def dirp(s):
 parser = argparse.ArgumentParser(description='Sorts shows in a non-destructive manner')
 parser.add_argument('show', type=str, nargs='+', help='directory containing episodes')
 parser.add_argument('-s', '--season', action='append', nargs='+', help="split show into seasons")
+parser.add_argument('-1', '--one', help='show only contains one season: for when you have multiple copies of the same show')
 args = parser.parse_args()
 
 srt = Sorter(args)
