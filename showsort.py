@@ -181,7 +181,7 @@ class Sorter:
             #         #     rmdir('Season %.2d' % kdx)
             #         return
             # for episode in files:
-                if jj = int(season):
+                if jj == int(season):
                     jj = 1
                 if not path.islink(episode):
                     # Don't rename files that aren't symlinks
