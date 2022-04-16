@@ -132,6 +132,8 @@ class Sorter:
                         chdir('..')
                         rmdir('Season %.2d' % kdx)
                     return
+                if Path('.').glob(f'S*E* {path.basename(ep)}'):
+                    continue
                 try:
                     symlink(ep, path.basename(ep))
                 except OSError as e:
@@ -151,9 +153,11 @@ class Sorter:
                 elif re.match(r'S\d+E\d+', episode):
                     # Don't rename files that already have been renamed
                     continue
-                tmp = "S%.2dE%.2d %s" % (ii, jj, path.basename(episode))
-                rename(episode, tmp)
-                # print(f'`{episode}` -> `{tmp}`')
+                prefix = 'S%.2dE%.2d ' % (ii, jj)
+                nn, _ = re.subn(r'^(S\d*E\d* )?', prefix, path.basename(episode))
+                #tmp = "S%.2dE%.2d %s" % (ii, jj, path.basename(episode))
+                rename(episode, nn)
+                print(f'`{episode}` -> `{tmp}`')
                 jj += 1
             chdir('../')
             ii += 1
@@ -164,7 +168,7 @@ def dirp(s):
 
 
 #
-parser = argparse.ArgumentParser(description='Sorts shows in a torrent friendly manner')
+parser = argparse.ArgumentParser(description='Sorts shows in a non-destructive manner')
 parser.add_argument('show', type=str, nargs='+', help='directory containing episodes')
 parser.add_argument('-s', '--season', action='append', nargs='+', help="split show into seasons")
 args = parser.parse_args()
