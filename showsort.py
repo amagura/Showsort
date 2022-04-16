@@ -119,45 +119,12 @@ class Sorter:
 
     def _rename(self, episode, numbers):
             nums = numbers
-            # files = self._find(getcwd())
-            # jj = 1
-            # for episode in files:
-            # for epint in range(int(season)):
-            #     try:
-            #         episode = files.pop(0)
-            #     except IndexError as e:
-            #         left = 1 if len(self.seasons) - ii == 0 else len(self.seasons) - ii
-            #         right = 'season' if left == 1 else 'seasons'
-            #         print(f'error: out of episodes, but {left} {right} left')
-            #         print('listdir: %s' % os.listdir('..'))
-            #         chdir('..')
-            #         rmdir('Season %.2d' % ii)
-            #         # print(f'* ii: {ii}\n* len(self.seasons): {len(self.seasons)}')
-            #         # for kdx in range(ii, len(self.seasons)):
-            #         #     chdir('..')
-            #         #     print(f'self.seasons: {self.seasons}')
-            #         #     print(f'Season %d: Season {kdx}')
-            #         #     rmdir('Season %.2d' % kdx)
-            #         return
-            # for episode in files:
-            re.sub
-            if re.match(r'S\d+E\d+', path.basename(episode)):
+            ep = path.basename(episode)
+            if re.match(r'S\d+E\d+', ep):
                 return
             prefix = 'S%.2dE%.2d ' % numbers
-            nn, _ = re.subn(r'^(S\d*E\d* )?', prefix, path.basename(episode))
-            # nn = "S%.2dE%.2d %s" % (nums[0], nums[1], path.basename(episode))
-            rename(episode, nn)
-                # if jj == int(season):
-                #     jj = 1
-                # if not path.islink(episode):
-                    # Don't rename files that aren't symlinks
-                    # continue
-                # elif re.match(r'S\d+E\d+', path.basename(episode)):
-                #     # Don't rename files that already have been renamed
-                #     continue
-                # prefix = 'S%.2dE%.2d ' % (ii, jj)
-                # episode = re.sub(r'/S\d+E\d+ ', '/', episode)
-                # print(f'`{episode}` -> `{nn}`')
+            nn, _ = re.subn(r'^(S\d*E\d* )?', prefix, ep)
+            rename(ep, nn)
 
     def _linker(self):
         ii = 1
