@@ -190,7 +190,7 @@ def dirp(s):
 parser = argparse.ArgumentParser(description='Sorts shows in a non-destructive manner')
 parser.add_argument('show', type=str, nargs='+', help='directory containing episodes')
 parser.add_argument('-s', '--season', action='append', nargs='+', help="split show into seasons")
-parser.add_argument('-1', '--one', help='show only contains one season: for when you have multiple copies of the same show')
+parser.add_argument('-1', '--one', nargs='0', help='show only contains one season: for when you have multiple copies of the same show')
 args = parser.parse_args()
 
 srt = Sorter(args)
