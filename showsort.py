@@ -166,7 +166,7 @@ class Sorter:
                     #     rmdir('Season %.2d' % kdx)
                     return
                 self._link(ep)
-                self._rename(ep, (ii, epint))
+                self._rename(ep, (ii, epint + 1))
             chdir('../')
             ii += 1
         if ii == 1:
