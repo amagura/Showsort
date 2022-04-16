@@ -140,11 +140,12 @@ class Sorter:
             #         #     rmdir('Season %.2d' % kdx)
             #         return
             # for episode in files:
-            if path.islink(path.basename(episode)):
-                continue
-            elif re.match(r'S\d+E\d+', path.basename(episode)):
-                continue
-            nn = "S%.2dE%.2d %s" % (nums[0], nums[1], path.basename(episode))
+            re.sub
+            if re.match(r'S\d+E\d+', path.basename(episode)):
+                return
+            prefix = 'S%.2dE%.2d ' % numbers
+            nn, _ = re.subn(r'^(S\d*E\d* )?', prefix, path.basename(episode))
+            # nn = "S%.2dE%.2d %s" % (nums[0], nums[1], path.basename(episode))
             rename(episode, nn)
                 # if jj == int(season):
                 #     jj = 1
@@ -156,7 +157,6 @@ class Sorter:
                 #     continue
                 # prefix = 'S%.2dE%.2d ' % (ii, jj)
                 # episode = re.sub(r'/S\d+E\d+ ', '/', episode)
-                # nn, _ = re.subn(r'^(S\d*E\d* )?', prefix, path.basename(episode))
                 # print(f'`{episode}` -> `{nn}`')
 
     def _linker(self):
