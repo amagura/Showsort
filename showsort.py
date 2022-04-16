@@ -129,6 +129,8 @@ class Sorter:
                     left = 1 if len(self.seasons) - ii == 0 else len(self.seasons) - ii
                     right = 'season' if left == 1 else 'seasons'
                     print(f'error: out of episodes, but {left} {right} left')
+                    print('listdir: %s' % os.listdir('..'))
+                    chdir('..')
                     rmdir('Season %.2d' % ii)
                     # print(f'* ii: {ii}\n* len(self.seasons): {len(self.seasons)}')
                     # for kdx in range(ii, len(self.seasons)):
