@@ -164,7 +164,7 @@ class Sorter:
             jj = 1
             for epint in range(int(season)):
                 try:
-                    episode = self.episodes.pop(0)
+                    episode = files.pop(0)
                 except IndexError as e:
                     left = 1 if len(self.seasons) - ii == 0 else len(self.seasons) - ii
                     right = 'season' if left == 1 else 'seasons'
