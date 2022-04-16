@@ -139,8 +139,11 @@ class Sorter:
                     #     print(f'Season %d: Season {kdx}')
                     #     rmdir('Season %.2d' % kdx)
                     return
-                if Path('.').glob(f'S*E* {path.basename(ep)}'):
-                    continue
+                try:
+                    glob = next(Path('.').glob(f'S*E* {path.basename(ep)}'))
+                    print(f'glob: {glob}')
+                except StopIteration as e:
+                    pass
                 try:
                     symlink(ep, path.basename(ep))
                 except OSError as e:
@@ -164,7 +167,7 @@ class Sorter:
                 nn, _ = re.subn(r'^(S\d*E\d* )?', prefix, path.basename(episode))
                 #tmp = "S%.2dE%.2d %s" % (ii, jj, path.basename(episode))
                 rename(episode, nn)
-                print(f'`{episode}` -> `{tmp}`')
+                # print(f'`{episode}` -> `{nn}`')
                 jj += 1
             chdir('../')
             ii += 1
