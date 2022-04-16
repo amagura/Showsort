@@ -170,7 +170,7 @@ class Sorter:
                     # Don't rename files that already have been renamed
                     continue
                 prefix = 'S%.2dE%.2d ' % (ii, jj)
-                re.sub(r'/S\d+E\d+ ', '/', episode)
+                episode = re.sub(r'/S\d+E\d+ ', '/', episode)
                 nn, _ = re.subn(r'^(S\d*E\d* )?', prefix, path.basename(episode))
                 #tmp = "S%.2dE%.2d %s" % (ii, jj, path.basename(episode))
                 rename(episode, nn)
