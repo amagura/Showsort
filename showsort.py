@@ -186,13 +186,13 @@ class Sorter:
                 if not path.islink(episode):
                     # Don't rename files that aren't symlinks
                     continue
-                elif re.match(r'S\d+E\d+', episode):
+                elif re.match(r'S\d+E\d+', path.basename(episode)):
                     # Don't rename files that already have been renamed
                     continue
-                prefix = 'S%.2dE%.2d ' % (ii, jj)
+                # prefix = 'S%.2dE%.2d ' % (ii, jj)
                 # episode = re.sub(r'/S\d+E\d+ ', '/', episode)
-                nn, _ = re.subn(r'^(S\d*E\d* )?', prefix, path.basename(episode))
-                #tmp = "S%.2dE%.2d %s" % (ii, jj, path.basename(episode))
+                # nn, _ = re.subn(r'^(S\d*E\d* )?', prefix, path.basename(episode))
+                nn = "S%.2dE%.2d %s" % (ii, jj, path.basename(episode))
                 rename(episode, nn)
                 # print(f'`{episode}` -> `{nn}`')
                 jj += 1
