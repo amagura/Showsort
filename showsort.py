@@ -13,6 +13,7 @@ import re
 # import wikipedia
 
 from os import walk, getcwd, path, symlink, mkdir, chdir, rename, listdir, rmdir
+from pathlib import Path
 from sys import argv, exit
 # from os import listdir
 # from os.path import isfile, join
@@ -128,9 +129,13 @@ class Sorter:
                     left = 1 if len(self.seasons) - ii == 0 else len(self.seasons) - ii
                     right = 'season' if left == 1 else 'seasons'
                     print(f'error: out of episodes, but {left} {right} left')
-                    for kdx in range(ii, len(self.seasons) + 1):
-                        chdir('..')
-                        rmdir('Season %.2d' % kdx)
+                    rmdir('Season %.2d' % ii)
+                    # print(f'* ii: {ii}\n* len(self.seasons): {len(self.seasons)}')
+                    # for kdx in range(ii, len(self.seasons)):
+                    #     chdir('..')
+                    #     print(f'self.seasons: {self.seasons}')
+                    #     print(f'Season %d: Season {kdx}')
+                    #     rmdir('Season %.2d' % kdx)
                     return
                 if Path('.').glob(f'S*E* {path.basename(ep)}'):
                     continue
