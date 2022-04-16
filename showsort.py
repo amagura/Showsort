@@ -162,24 +162,27 @@ class Sorter:
             ## Rename files
             files = self._find(getcwd())
             jj = 1
-            for epint in range(int(season)):
-                try:
-                    episode = files.pop(0)
-                except IndexError as e:
-                    left = 1 if len(self.seasons) - ii == 0 else len(self.seasons) - ii
-                    right = 'season' if left == 1 else 'seasons'
-                    print(f'error: out of episodes, but {left} {right} left')
-                    print('listdir: %s' % os.listdir('..'))
-                    chdir('..')
-                    rmdir('Season %.2d' % ii)
-                    # print(f'* ii: {ii}\n* len(self.seasons): {len(self.seasons)}')
-                    # for kdx in range(ii, len(self.seasons)):
-                    #     chdir('..')
-                    #     print(f'self.seasons: {self.seasons}')
-                    #     print(f'Season %d: Season {kdx}')
-                    #     rmdir('Season %.2d' % kdx)
-                    return
+            for episode in files:
+            # for epint in range(int(season)):
+            #     try:
+            #         episode = files.pop(0)
+            #     except IndexError as e:
+            #         left = 1 if len(self.seasons) - ii == 0 else len(self.seasons) - ii
+            #         right = 'season' if left == 1 else 'seasons'
+            #         print(f'error: out of episodes, but {left} {right} left')
+            #         print('listdir: %s' % os.listdir('..'))
+            #         chdir('..')
+            #         rmdir('Season %.2d' % ii)
+            #         # print(f'* ii: {ii}\n* len(self.seasons): {len(self.seasons)}')
+            #         # for kdx in range(ii, len(self.seasons)):
+            #         #     chdir('..')
+            #         #     print(f'self.seasons: {self.seasons}')
+            #         #     print(f'Season %d: Season {kdx}')
+            #         #     rmdir('Season %.2d' % kdx)
+            #         return
             # for episode in files:
+                if jj = int(season):
+                    jj = 1
                 if not path.islink(episode):
                     # Don't rename files that aren't symlinks
                     continue
