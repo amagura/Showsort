@@ -147,7 +147,7 @@ class Sorter:
             chdir('Season %.2d' % ii)
             ## Link files
             # print(f'season: {season}')
-            for ep,ind in enumerate(self.episodes):
+            for ind,ep in enumerate(self.episodes):
                 self._link(ep)
                 if not self.args.no_rename:
                     self._rename(ep, (ii, ind + 1))
