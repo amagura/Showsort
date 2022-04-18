@@ -147,30 +147,39 @@ class Sorter:
             chdir('Season %.2d' % ii)
             ## Link files
             # print(f'season: {season}')
-            for epint in range(int(season)):
-                # print(f'epint: {epint}')
-                # if limit == 0:
-                #     break
-                # print(path.realpath(ep))
-                try:
-                    ep = self.episodes.pop(0)
-                except IndexError as e:
-                    left = 1 if len(self.seasons) - ii == 0 else len(self.seasons) - ii
-                    right = 'season' if left == 1 else 'seasons'
-                    print(f'error: out of episodes, but {left} {right} left')
-                    print('listdir: %s' % os.listdir('..'))
-                    chdir('..')
-                    rmdir('Season %.2d' % ii)
-                    # print(f'* ii: {ii}\n* len(self.seasons): {len(self.seasons)}')
-                    # for kdx in range(ii, len(self.seasons)):
-                    #     chdir('..')
-                    #     print(f'self.seasons: {self.seasons}')
-                    #     print(f'Season %d: Season {kdx}')
-                    #     rmdir('Season %.2d' % kdx)
-                    return
+            for ep,ind in enumerate(self.episodes):
                 self._link(ep)
                 if not self.args.no_rename:
-                    self._rename(ep, (ii, epint + 1))
+                    self._rename(ep, (ii, ind + 1))
+
+            # for episode in episodes:
+            #     self._link(episode)
+            #     if not self.args.no_rename:
+            #         self._rename(episode, (ii,
+            # for epint in range(int(season)):
+            #     # print(f'epint: {epint}')
+            #     # if limit == 0:
+            #     #     break
+            #     # print(path.realpath(ep))
+            #     try:
+            #         ep = self.episodes.pop(0)
+            #     except IndexError as e:
+            #         left = 1 if len(self.seasons) - ii == 0 else len(self.seasons) - ii
+            #         right = 'season' if left == 1 else 'seasons'
+            #         print(f'error: out of episodes, but {left} {right} left')
+            #         print('listdir: %s' % os.listdir('..'))
+            #         chdir('..')
+            #         rmdir('Season %.2d' % ii)
+            #         # print(f'* ii: {ii}\n* len(self.seasons): {len(self.seasons)}')
+            #         # for kdx in range(ii, len(self.seasons)):
+            #         #     chdir('..')
+            #         #     print(f'self.seasons: {self.seasons}')
+            #         #     print(f'Season %d: Season {kdx}')
+            #         #     rmdir('Season %.2d' % kdx)
+            #         return
+            #     self._link(ep)
+            #     if not self.args.no_rename:
+                    # self._rename(ep, (ii, epint + 1))
             chdir('../')
             ii += 1
         if ii == 1:
