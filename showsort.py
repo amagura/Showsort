@@ -104,6 +104,9 @@ class Sorter:
         # exit(0)
         self._linker()
 
+    def _extras(self):
+        if
+
     def _link(self, episode):
         try:
             glob = next(Path('.').glob(f'S*E* {path.basename(episode)}'))
@@ -120,10 +123,12 @@ class Sorter:
 
     def _rename(self, episode, numbers):
         ep = path.basename(episode)
-        if not path.islink(episode):
+        if not path.islink(ep):
             print(f'warn: episode is not a symlink - dangerous rename: {ep}')
             return
         elif re.match(r'S\d+E\d+', ep):
+            return
+        elif self.args.no_rename:
             return
 
         prefix = 'S%.2dE%.2d ' % numbers
@@ -180,8 +185,7 @@ class Sorter:
                     #     rmdir('Season %.2d' % kdx)
                     return
                 self._link(ep)
-                if not self.args.no_rename:
-                    self._rename(ep, (ii, epint + 1))
+                self._rename(ep, (ii, epint + 1))
             chdir('../')
             ii += 1
         if ii == 1:
@@ -194,7 +198,7 @@ parser.add_argument('show', type=str, nargs='+', help='directory containing epis
 parser.add_argument('-s', '--season', action='append', nargs='+', help="split show into seasons")
 parser.add_argument('-1', '--one', action='store_true', help='show only contains one season: for when you have multiple copies of the same show')
 parser.add_argument('-N', '--no-rename', action='store_true', help='don\'t rename episodes')
-parser.add_argument('-S', '--source', action='append', nargs='+', help="link sources to destination directly")
+parser.add_argument('-S', action='append', nargs='+', help="link sources to destination directly")
 parser.add_argument('-E', '--extras-dir', nargs=1, help='directory to place extras in')
 parser.add_argument('-O', '--ovas-dir', nargs=1, help='directory to place OVAs and TV show movies in')
 args = parser.parse_args()
