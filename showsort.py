@@ -28,7 +28,7 @@ class Sorter:
         self.seasons = args.season
         # self.seasons = self._flatten(self.seasons)
         self.seasons = self._flatten(self.seasons)
-        self.one = args.one
+        self.args = args
         # self.episodes = self._find()
         # print(self.seasons)
         # print(self.episodes[0])
@@ -98,6 +98,9 @@ class Sorter:
     #    for e in (flatten(*a) if isinstance(a, (tuple, list)) else (a,)))
 
     def sort(self):
+        if self.args.source:
+            print(self.args.source)
+            exit(0)
         self.episodes = self._find()
         # print(self.episodes)
         # exit(0)
@@ -130,7 +133,7 @@ class Sorter:
         ii = 1
         # print(self.episodes)
         for season in self.seasons:
-            if self.one:
+            if self.args.one:
                 ii = 1
             try:
                 # FIXME if there are more than 99 seasons, the seasons won't
@@ -166,23 +169,21 @@ class Sorter:
                     #     rmdir('Season %.2d' % kdx)
                     return
                 self._link(ep)
-                self._rename(ep, (ii, epint + 1))
+                if not self.args.no_rename:
+                    self._rename(ep, (ii, epint + 1))
             chdir('../')
             ii += 1
         if ii == 1:
             for ep in self.episodes:
                 self._link(ep)
 
-
-def dirp(s):
-    return True if path.exists(path.dirname(path.abspath(s))) else False
-
-
 #
 parser = argparse.ArgumentParser(description='Sorts shows in a non-destructive manner')
 parser.add_argument('show', type=str, nargs='+', help='directory containing episodes')
 parser.add_argument('-s', '--season', action='append', nargs='+', help="split show into seasons")
 parser.add_argument('-1', '--one', action='store_true', help='show only contains one season: for when you have multiple copies of the same show')
+parser.add_argument('-N', '--no-rename', action='store_true', help='don\'t rename episodes')
+parser.add_argument('-S', '--source', action='append', nargs='+', help="link sources to destination directly")
 args = parser.parse_args()
 
 srt = Sorter(args)
