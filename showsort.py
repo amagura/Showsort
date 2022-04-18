@@ -151,6 +151,7 @@ class Sorter:
                 self._link(ep)
                 if not self.args.no_rename:
                     self._rename(ep, (ii, ind + 1))
+                del self.episodes[ind]
 
             # for episode in episodes:
             #     self._link(episode)
