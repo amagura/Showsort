@@ -12,7 +12,7 @@ import re
 # import urllib
 # import wikipedia
 
-from os import walk, getcwd, path, symlink, mkdir, chdir, rename, listdir, rmdir
+from os import walk, getcwd, path, symlink, mkdir, chdir, rmdir
 from pathlib import Path
 from sys import argv, exit
 # from os import listdir
@@ -55,11 +55,9 @@ class Sorter:
         # print(pg.content)
 
     def _find(self, shows=None):
-        if shows == None:
+        if shows is None:
             shows = self.src
-
-
-        if type(shows) is not list:
+        elif not isinstance(shows, list):
             shows = [shows]
             # for show in shows:
             #     print(show)
@@ -121,13 +119,16 @@ class Sorter:
                     raise e
 
     def _rename(self, episode, numbers):
-            nums = numbers
-            ep = path.basename(episode)
-            if re.match(r'S\d+E\d+', ep):
-                return
-            prefix = 'S%.2dE%.2d ' % numbers
-            nn, _ = re.subn(r'^(S\d*E\d* )?', prefix, ep)
-            rename(ep, nn)
+        ep = path.basename(episode)
+        if not path.islink(episode):
+            print(f'warn: episode is not a symlink - dangerous rename: {ep}')
+            return
+        elif re.match(r'S\d+E\d+', ep):
+            return
+
+        prefix = 'S%.2dE%.2d ' % numbers
+        nn, _ = re.subn(r'^(S\d*E\d* )?', prefix, ep)
+        os.rename(ep, nn)
 
     def _linker(self):
         ii = 1
@@ -194,6 +195,8 @@ parser.add_argument('-s', '--season', action='append', nargs='+', help="split sh
 parser.add_argument('-1', '--one', action='store_true', help='show only contains one season: for when you have multiple copies of the same show')
 parser.add_argument('-N', '--no-rename', action='store_true', help='don\'t rename episodes')
 parser.add_argument('-S', '--source', action='append', nargs='+', help="link sources to destination directly")
+parser.add_argument('-E', '--extras-dir', nargs='1', help='directory to place extras in')
+parser.add_argument('-O', '--ovas-dir', nargs='1', help='directory to place OVAs and TV show movies in')
 args = parser.parse_args()
 
 srt = Sorter(args)
