@@ -55,6 +55,8 @@ class Sorter:
         # print(pg.content)
 
     def _find(self, shows=None):
+
+        # FIXME this needs to be able to be given a top-level directory and then find all directories containing episodes therein
         if shows is None:
             shows = self.src
         elif not isinstance(shows, list):
@@ -68,11 +70,13 @@ class Sorter:
         videos = []
 
         for show in shows:
-            files = next(walk(show), (None, None, []))[2]
+            (dirs, files) = next(walk(show), (None, [], []))[1:2]
+            dirs.sort()
             files.sort()
 
             known = filter(lambda x: mimetypes.guess_type(os.fsdecode(x)) != (None, None), files)
             vids = filter(lambda x: mimetypes.guess_type(os.fsdecode(x))[0].startswith('video'), known)
+            fat = [x for x in known if x not in vids]
             real_vids = map(lambda x: path.join(show, x), vids)
             vids = list(real_vids)
             videos.append(vids)
@@ -82,7 +86,7 @@ class Sorter:
         # self.episodes = videos
         # print(videos)
         # exit(0)
-        return videos
+        return (videos, fat, dirs)
 
         # return files
 
@@ -99,13 +103,16 @@ class Sorter:
         if self.args.source:
             print(self.args.source)
             exit(0)
-        self.episodes = self._find()
+        (v, f, d) = self._find()
+        self.episodes = v
+        self.files = f
+        self.dirs = d
+        for
         # print(self.episodes)
         # exit(0)
         self._linker()
 
     def _extras(self):
-        if
 
     def _link(self, episode):
         try:
@@ -194,7 +201,8 @@ class Sorter:
 
 #
 parser = argparse.ArgumentParser(description='Sorts shows in a non-destructive manner')
-parser.add_argument('show', type=str, nargs='+', help='directory containing episodes')
+parser.add_argument('source', type=str, nargs='+', help='directory containing episodes')
+parser.add_argument('dest', type=str, nargs=1, help='install show episodes into DEST')
 parser.add_argument('-s', '--season', action='append', nargs='+', help="split show into seasons")
 parser.add_argument('-1', '--one', action='store_true', help='show only contains one season: for when you have multiple copies of the same show')
 parser.add_argument('-N', '--no-rename', action='store_true', help='don\'t rename episodes')
