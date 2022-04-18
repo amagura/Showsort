@@ -195,8 +195,8 @@ parser.add_argument('-s', '--season', action='append', nargs='+', help="split sh
 parser.add_argument('-1', '--one', action='store_true', help='show only contains one season: for when you have multiple copies of the same show')
 parser.add_argument('-N', '--no-rename', action='store_true', help='don\'t rename episodes')
 parser.add_argument('-S', '--source', action='append', nargs='+', help="link sources to destination directly")
-parser.add_argument('-E', '--extras-dir', nargs='1', help='directory to place extras in')
-parser.add_argument('-O', '--ovas-dir', nargs='1', help='directory to place OVAs and TV show movies in')
+parser.add_argument('-E', '--extras-dir', nargs=1, help='directory to place extras in')
+parser.add_argument('-O', '--ovas-dir', nargs=1, help='directory to place OVAs and TV show movies in')
 args = parser.parse_args()
 
 srt = Sorter(args)
